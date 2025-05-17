@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
     [Generator]
     public class TranslationClassBuilder : ISourceGenerator
     {
-        private string _translationFolder = "i18n";
+        private readonly string _translationFolderName = "i18n";
 
         /*********
         ** Public methods
@@ -181,7 +181,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
             if (parentName != null && Path.GetExtension(fullPath).Equals(".json", StringComparison.OrdinalIgnoreCase))
             {
                 // root file
-                if (parentName.Equals(this._translationFolder, StringComparison.OrdinalIgnoreCase))
+                if (parentName.Equals(this._translationFolderName, StringComparison.OrdinalIgnoreCase))
                 {
                     isRootFile = true;
                     isDefaultLocale = Path.GetFileName(fullPath).Equals("default.json", StringComparison.OrdinalIgnoreCase);
@@ -191,7 +191,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
                 // subfolder
                 string? grandparentDirPath = Path.GetDirectoryName(parentDirPath);
                 string? grandparentName = Path.GetFileName(grandparentDirPath);
-                if (grandparentName?.Equals(this._translationFolder, StringComparison.OrdinalIgnoreCase) is true)
+                if (grandparentName?.Equals(this._translationFolderName, StringComparison.OrdinalIgnoreCase) is true)
                 {
                     isRootFile = false;
                     isDefaultLocale = parentName.Equals("default", StringComparison.OrdinalIgnoreCase);
@@ -233,7 +233,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
             // get absolute path to i18n folder
             string? translationsBasePath = null;
             if (context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.MSBuildProjectDirectory", out string? projectDir))
-                translationsBasePath = Path.Combine(projectDir, this._translationFolder) + Path.DirectorySeparatorChar;
+                translationsBasePath = Path.Combine(projectDir, this._translationFolderName) + Path.DirectorySeparatorChar;
 
             // scan files
             bool foundRootFile = false;
@@ -290,7 +290,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
             return Array.Empty<TranslationEntry>();
         }
 
-        /// <summary>Whether a given AdditionalFile has LinkBase metadata set to <see cref="_translationFolder"/>.</summary>
+        /// <summary>Whether a given AdditionalFile has LinkBase metadata set to <see cref="_translationFolderName"/>.</summary>
         /// <param name="context">The source generator execution context.</param>
         /// <param name="file">The AdditionalFile.</param>
         /// <returns>true if LinkBase is i18n, else false.</returns>
@@ -301,7 +301,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
                 .TryGetValue(
                     "build_metadata.AdditionalFiles.LinkBase",
                     out string? linkBase) &&
-                   linkBase == this._translationFolder + Path.DirectorySeparatorChar;
+                   linkBase == this._translationFolderName + Path.DirectorySeparatorChar;
         }
 
         /// <summary>Get the token names used in a translation value.</summary>
