@@ -7,6 +7,7 @@
         <CompilerVisibleProperty Include="TranslationClassBuilder_ClassModifiers" />
         <CompilerVisibleProperty Include="TranslationClassBuilder_ClassName" />
         <CompilerVisibleProperty Include="TranslationClassBuilder_Namespace" />
+        <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="LinkBase" />
     </ItemGroup>
 
     <!-- make translation file available to source generators -->

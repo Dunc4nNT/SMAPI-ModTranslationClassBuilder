@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
+        <!--<PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />-->
+    </ItemGroup>
+
+    <!-- For local testing only: remove the package reference above, and uncomment the code below.-->
+
+    <ItemGroup>
+      <ProjectReference Include="$(SolutionDir)\ModTranslationClassBuilder\ModTranslationClassBuilder.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <Import Project="$(SolutionDir)\ModTranslationClassBuilder\assets\package.targets" />
+</Project>

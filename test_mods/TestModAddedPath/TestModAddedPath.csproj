@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Pathoschild.Stardew.TestModAddedPath</AssemblyName>
+    <RootNamespace>Pathoschild.Stardew.TestModAddedPath</RootNamespace>
+
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AdditionalI18nPaths>$(SolutionDir)shared_i18n\i18n,$(MSBuildProjectDirectory)\added_paths\i18n</AdditionalI18nPaths>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(SolutionDir)\shared_i18n\i18n\**\*" LinkBase="i18n" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\added_paths\i18n\**\*" LinkBase="i18n" Link="i18n\%(RecursiveDir)\%(FileName)" />
+  </ItemGroup>
+</Project>
