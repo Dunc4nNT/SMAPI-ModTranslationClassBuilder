@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="$(SolutionDir)\shared_i18n\i18n\**\*" LinkBase="i18n" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\added_paths\i18n\**\*" LinkBase="i18n" Link="i18n\%(RecursiveDir)\%(FileName)" />
+    <I18nFiles Include="$(SolutionDir)\shared_i18n\i18n\**\*" Link="i18n\%(RecursiveDir)\%(FileName)" />
+    <I18nFiles Include="$(MSBuildProjectDirectory)\added_paths\i18n\**\*" Link="i18n\%(RecursiveDir)\%(FileName)" />
   </ItemGroup>
 </Project>

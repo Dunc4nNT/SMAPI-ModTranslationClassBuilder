@@ -7,12 +7,14 @@
         <CompilerVisibleProperty Include="TranslationClassBuilder_ClassModifiers" />
         <CompilerVisibleProperty Include="TranslationClassBuilder_ClassName" />
         <CompilerVisibleProperty Include="TranslationClassBuilder_Namespace" />
-        <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="LinkBase" />
+        <CompilerVisibleProperty Include="I18nFiles" />
+        <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="GenerateI18nContext" />
     </ItemGroup>
 
     <!-- make translation file available to source generators -->
     <ItemGroup>
-        <AdditionalFiles Include="i18n\**\*" />
+        <I18nFiles Include="i18n\**\*" />
+        <AdditionalFiles Include="@(I18nFiles)" GenerateI18nContext="true" />
     </ItemGroup>
 
     <!-- allow loading translation class from file so it can be in source control -->

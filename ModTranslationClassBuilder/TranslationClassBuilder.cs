@@ -14,8 +14,6 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
     [Generator]
     public class TranslationClassBuilder : ISourceGenerator
     {
-        private readonly string _translationFolderName = "i18n";
-
         /*********
         ** Public methods
         *********/
@@ -181,7 +179,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
             if (parentName != null && Path.GetExtension(fullPath).Equals(".json", StringComparison.OrdinalIgnoreCase))
             {
                 // root file
-                if (parentName.Equals(this._translationFolderName, StringComparison.OrdinalIgnoreCase))
+                if (parentName.Equals("i18n", StringComparison.OrdinalIgnoreCase))
                 {
                     isRootFile = true;
                     isDefaultLocale = Path.GetFileName(fullPath).Equals("default.json", StringComparison.OrdinalIgnoreCase);
@@ -191,7 +189,7 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
                 // subfolder
                 string? grandparentDirPath = Path.GetDirectoryName(parentDirPath);
                 string? grandparentName = Path.GetFileName(grandparentDirPath);
-                if (grandparentName?.Equals(this._translationFolderName, StringComparison.OrdinalIgnoreCase) is true)
+                if (grandparentName?.Equals("i18n", StringComparison.OrdinalIgnoreCase) is true)
                 {
                     isRootFile = false;
                     isDefaultLocale = parentName.Equals("default", StringComparison.OrdinalIgnoreCase);
@@ -230,20 +228,16 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
         {
             List<TranslationEntry> entries = new();
 
-            // get absolute path to i18n folder
-            string? translationsBasePath = null;
-            if (context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.MSBuildProjectDirectory", out string? projectDir))
-                translationsBasePath = Path.Combine(projectDir, this._translationFolderName) + Path.DirectorySeparatorChar;
-
             // scan files
             bool foundRootFile = false;
             bool foundSubfolder = false;
             foreach (AdditionalText file in context.AdditionalFiles)
             {
                 // ignore non-i18n files
-                if (translationsBasePath != null &&
-                    !Path.GetFullPath(file.Path).StartsWith(translationsBasePath) &&
-                    !this.HasValidTranslationLinkBase(context, file))
+                if (!context.AnalyzerConfigOptions.GetOptions(file).TryGetValue(
+                        "build_metadata.AdditionalFiles.GenerateI18nContext",
+                        out string? doGenerateI18nContext) ||
+                    !doGenerateI18nContext.Equals("true", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 // parse path
@@ -288,20 +282,6 @@ namespace Pathoschild.Stardew.ModTranslationClassBuilder
             // none found
             this.LogDiagnostic(context, foundSubfolder || foundRootFile ? Diagnostics.NoTranslationEntries : Diagnostics.NoTranslationFile);
             return Array.Empty<TranslationEntry>();
-        }
-
-        /// <summary>Whether a given AdditionalFile has LinkBase metadata set to <see cref="_translationFolderName"/>.</summary>
-        /// <param name="context">The source generator execution context.</param>
-        /// <param name="file">The AdditionalFile.</param>
-        /// <returns>true if LinkBase is i18n, else false.</returns>
-        private bool HasValidTranslationLinkBase(GeneratorExecutionContext context, AdditionalText file)
-        {
-            return context.AnalyzerConfigOptions
-                .GetOptions(file)
-                .TryGetValue(
-                    "build_metadata.AdditionalFiles.LinkBase",
-                    out string? linkBase) &&
-                   linkBase == this._translationFolderName + Path.DirectorySeparatorChar;
         }
 
         /// <summary>Get the token names used in a translation value.</summary>
